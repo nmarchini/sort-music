@@ -1,0 +1,122 @@
+# music-sorter
+
+## Why do you need this?
+I download music tracks for DJing from lots of different places and then import them into my music tool (rekordbox). As I am not that disciplined the files 
+stay in the folder they were downloaded to until I manually move them somethere else. Moving them usually involves just copying the folder to my external 1TB USB
+where I store my Rekordbox library. This then leaves me with a mess of folders.
+
+Almost all the music I download has a Genre tag, or I will add one in Rekordbox. This is what is used to organise and move the tracks to the destination.
+
+Once I run this tool then I use the Missing files menu option in Rekordbox to find the moved files.
+
+**Before**
+
+```aiexclude
+── beatport_tracks_2026-02
+│   ├── Matthew Sona - Troja  (Original Mix).aiff
+│   ├── Maximo Gambini, JUAN BUITRAGO, Julian Moreno - Blended (Original Mix).aiff
+│   └── Nils Nuernberg - Seduction (Original).aiff
+├── beatport_tracks_2026-06
+│   ├── M-Sol DEEP, AALEX - Illusions (Instrumental Mix).aiff
+│   └── M-Sol DEEP, AALEX - Illusions (Original Mix).aiff
+├── Benja_Molina__Ilias_Katelanos__Plecta-Pandora-Original_Mix-77716483.mp3
+├── Bicep - Glue (COQUEIT & After Burn Unnoficial remix).wav
+├── Binary Finary - 1998 (MOSHIC 2022 REMIX).aiff
+├── Born Slippy - Underworld (Cristian Caro Unofficial Remix).wav
+├── Breeder - Tyrantanic (Federico Cabrera & Martin Gardoqui Unofficial Remix).wav
+├── Deep Progressive - Organic
+│   ├── 3.14 (AR) - Reminder (Juan Deminicis & NUFECTS Remix).mp3
+│   ├── 84 Avenue - Delight (Extended Mix).mp3
+│   ├── Above & Beyond, PROFF - Palermo (Extended Mix) (2).mp3
+│
+```
+
+**After**
+```aiexclude
+├── Nu Disco  -  Indie Dance
+├── Organic House
+├── Progressive
+├── Progressive Electronic
+├── Progressive House
+├── Progressive Trance
+├── Psy-Trance
+├── Soulful House
+├── Tech House
+├── Tech House - Tribal
+├── Tech Trance
+├── Techno
+├── Techno - Melodic - Progressive House
+├── Techno (Deep)
+├── Techno (Peak Time  -  Driving)
+├── Techno (Peak Time)
+├── Techno (Psy)
+├── Unsorted
+```
+
+
+## The tool
+A small Bash wrapper around [ExifTool](https://exiftool.org/) that sorts audio
+files into folders based on their **Genre** tag.
+
+Files with no genre metadata fall back to an "Unsorted" folder instead of
+causing an error, so a first-pass run never leaves anything behind.
+
+> ⚠️ **This moves files, not copies them.** Run with `--dry-run` first,
+> especially the first time you point it at a real library.
+
+## Requirements
+
+- **ExifTool**
+  - macOS: `brew install exiftool`
+  - Debian/Ubuntu: `sudo apt install libimage-exiftool-perl`
+  - Fedora: `sudo dnf install perl-Image-ExifTool`
+- Bash (macOS and Linux ship with a compatible version)
+
+## Usage
+
+```bash
+chmod +x music-sorter.sh
+
+# Preview first — always do this before a real run
+./music-sorter.sh -s ~/Music/Incoming -d ~/Music/Sorted --dry-run
+
+# Actually sort the files
+./music-sorter.sh -s ~/Music/Incoming -d ~/Music/Sorted
+```
+
+### Options
+
+| Flag             | Description                                                   | Default                     |
+|------------------|-----------------------------------------------------------------|------------------------------|
+| `-s, --source`   | Folder to scan recursively for audio files (**required**)      | —                            |
+| `-d, --dest`     | Base folder to sort files into; each genre becomes a subfolder (**required**) | — |
+| `-u, --unsorted` | Subfolder name (under `dest`) for files with no Genre tag      | `Unsorted`                   |
+| `-e, --ext`      | File extension to include. Repeatable                          | `flac` `mp3` `wav` `aiff`    |
+| `-n, --dry-run`  | Print what would happen without moving anything                | off                          |
+| `-h, --help`     | Show usage                                                      | —                            |
+
+### Examples
+
+```bash
+# Only sort mp3 and flac, with a custom fallback folder name
+./music-sorter.sh -s . -d /Volumes/PRI/_Tracks -u "No Genre" -e mp3 -e flac
+
+# Nested genres (e.g. Genre tag "Electronic/Techno") become
+# "Electronic - Techno" subfolders, since "/" isn't safe in a path
+./music-sorter.sh -s ~/Downloads/NewTracks -d ~/Music/Library
+```
+
+## How it works
+
+ExifTool's `-Directory` tag can be assigned twice in one command. The first
+assignment sets a fallback destination; the second tries to overwrite it
+using the file's `Genre` tag. If a file has no Genre tag, the second
+assignment silently fails and the fallback from the first sticks — so files
+without genre metadata land in the fallback folder instead of erroring out.
+
+Genre values containing `/` (e.g. `Hip Hop/Rap`) are rewritten to use ` - `
+instead, since `/` would otherwise be read as a folder separator.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
