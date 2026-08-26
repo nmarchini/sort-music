@@ -14,7 +14,7 @@ set -euo pipefail
 SOURCE=""
 DEST=""
 UNSORTED_NAME="Unsorted"
-EXTENSIONS=(flac mp3 wav aiff)
+EXTENSIONS=(flac mp3 wav aiff m4a)
 DRY_RUN=0
 
 # ---- helpers ------------------------------------------------------
@@ -34,7 +34,7 @@ OPTIONS:
   -u, --unsorted NAME    Subfolder name (under DEST) for files with no
                           Genre tag. Default: "Unsorted"
   -e, --ext EXT          File extension to include. Repeatable.
-                          Default: flac mp3 wav aiff
+                          Default: flac mp3 wav aiff m4a
   -n, --dry-run          Show what would happen without moving anything
   -h, --help             Show this help and exit
 
