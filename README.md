@@ -90,6 +90,28 @@ chmod +x music-sorter.sh
 ./music-sorter.sh -s ~/Music/Incoming -d ~/Music/Sorted
 ```
 
+Example of Dry run
+```bash
+./music-sorter.sh -s /Users/username/Downloads/JasonStill -d /Volumes/PRI/_tracks --dry-run
+Dry run — no files will be moved.
+Source:    /Users/username/Downloads/JasonStill
+Dest base: /Volumes/PRI/_tracks
+Fallback:  /Volumes/PRI/_tracks/Unsorted
+Extensions: flac mp3 wav aiff m4a
+
+Jason Still - Solar Promise - 05 Festival Continuum.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 01 Clubbing Lantern.aiff -> /Volumes/PRI/_tracks/Trance (Raw - Deep - Hypnotic)
+Jason Still - Solar Promise - 06 Modern Vision.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 04 Electric Alignment.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 08 Nightfall Elevation.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 02 Dancing Mirage.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 10 Starlit Twilight.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 07 Moonlit Compass.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 03 Dynamic Tides.aiff -> /Volumes/PRI/_tracks/Progressive House
+Jason Still - Solar Promise - 09 Solar Promise.aiff -> /Volumes/PRI/_tracks/Progressive House
+```
+
+
 ### Options
 
 | Flag             | Description                                                   | Default                        |
